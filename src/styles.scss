@@ -1,1 +1,10 @@
 /* You can add global styles to this file, and also import other style files */
+@import "nes.css/css/nes.css";
+@import "ngx-nes-css/css/styles.css";
+@import "@angular/cdk/overlay-prebuilt.css";
+@import url("https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap");
+
+html,
+body {
+  font-family: "Press Start 2P", cursive;
+}

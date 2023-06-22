@@ -6,19 +6,19 @@ import { AppComponent } from './app.component';
 import { HomeComponent } from './pages/home/home.component';
 import { MainPageComponent } from './pages/main-page/main-page.component';
 import { IFramePageComponent } from './pages/iframe-page/iframe-page.component';
+import { NesModule } from 'ngx-nes-css';
+import { ButtonComponent } from './components/button/button.component';
 
 @NgModule({
   declarations: [
     AppComponent,
     HomeComponent,
     MainPageComponent,
-    IFramePageComponent
+    IFramePageComponent,
+    ButtonComponent,
   ],
-  imports: [
-    BrowserModule,
-    AppRoutingModule
-  ],
+  imports: [BrowserModule, AppRoutingModule, NesModule],
   providers: [],
-  bootstrap: [AppComponent]
+  bootstrap: [AppComponent],
 })
-export class AppModule { }
+export class AppModule {}
