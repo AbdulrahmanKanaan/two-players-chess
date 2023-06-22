@@ -1,0 +1,6 @@
+<div class="player-container">
+  <app-player-name>{{ playerName }}</app-player-name>
+  <nes-container [rounded]="true" class="bg-white" *ngIf="iFrameUrl">
+    <iframe #frame [src]="iFrameUrl" frameborder="0"></iframe>
+  </nes-container>
+</div>

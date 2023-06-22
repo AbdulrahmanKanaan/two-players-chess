@@ -1,10 +1,68 @@
-import { Component } from '@angular/core';
+import { Component, HostListener, OnInit, ViewChild } from '@angular/core';
+import { ActivatedRoute } from '@angular/router';
+import { MoveChange, NgxChessBoardComponent } from 'ngx-chess-board';
+import { actions } from 'src/app/constants';
+import { Message, Move } from 'src/app/types';
+import { environment } from 'src/environments/environment';
 
 @Component({
   selector: 'app-iframe-page',
   templateUrl: './iframe-page.component.html',
-  styleUrls: ['./iframe-page.component.scss']
+  styleUrls: ['./iframe-page.component.scss'],
 })
-export class IFramePageComponent {
+export class IFramePageComponent implements OnInit {
+  public color: string = '';
 
+  @ViewChild('board', { static: true }) board!: NgxChessBoardComponent;
+
+  constructor(private readonly route: ActivatedRoute) {}
+
+  ngOnInit(): void {
+    this.route.queryParams.subscribe((params) => {
+      this.color = params['color'];
+      this.color === 'black' && this.board.reverse();
+    });
+  }
+
+  private isLoadingState: boolean = false;
+
+  @HostListener('window:message', ['$event'])
+  public onMessage(event: MessageEvent<Message>) {
+    const { action, data } = event.data;
+    this.isLoadingState = true;
+    switch (action) {
+      case actions.MOVE:
+        this.board.move(data.move);
+        break;
+      case 'initializeBoard':
+        this.board.setPGN(data.pgn);
+        break;
+      default:
+        console.info('Unknown channel');
+    }
+    this.isLoadingState = false;
+  }
+
+  public onMove(event: any) {
+    // prevent hook from firing if it is loading an old game or from updating state after other color plays
+    if (this.isLoadingState) return;
+
+    const move: Move = {
+      move: event.move,
+      check: event.check,
+      stalemate: event.stalemate,
+      checkmate: event.checkmate,
+      fen: event.fen,
+      pgn: event.pgn.pgn,
+      isKill: event.x,
+      piece: event.piece,
+    };
+
+    const message: Message<Move> = {
+      action: actions.MOVE,
+      data: move,
+    };
+
+    window.parent.postMessage(message, `${environment.appUrl}`);
+  }
 }

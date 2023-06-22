@@ -12,4 +12,8 @@ export class HomeComponent {
   public onNewGameClick(): void {
     this.router.navigate(['mainpage']);
   }
+
+  public onLoadGameClick(): void {
+    console.log('SHOULD LOAD GAME');
+  }
 }

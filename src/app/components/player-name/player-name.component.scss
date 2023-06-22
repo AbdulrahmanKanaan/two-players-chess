@@ -1,0 +1,8 @@
+.player-name {
+  display: inline-block;
+  width: fit-content;
+  .badge-inner {
+    padding: 5px 10px;
+    position: unset;
+  }
+}

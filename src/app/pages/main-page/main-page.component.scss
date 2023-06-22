@@ -1,0 +1,35 @@
+@use "../../../styles/variables.scss" as v;
+
+.container {
+  width: 100vw;
+  min-height: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: 20px;
+  overflow: scroll;
+
+  @media screen and (max-width: v.$breakpoint) {
+    padding: 25px 0;
+  }
+}
+
+.game-container {
+  display: flex;
+  gap: 20px;
+
+  @media screen and (max-width: v.$breakpoint) {
+    flex-direction: column;
+  }
+}
+
+.baloon {
+  display: flex;
+  align-items: flex-end;
+  max-width: 900px;
+  img {
+    width: 100px;
+    height: 100px;
+  }
+}

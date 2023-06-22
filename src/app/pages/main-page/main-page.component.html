@@ -1,1 +1,18 @@
-<p>main-page works!</p>
+<div class="container">
+  <div class="game-container">
+    <app-board [playerName]="whiteName" playerColor="white" />
+    <app-board [playerName]="blackName" playerColor="black" />
+  </div>
+
+  <div class="baloon">
+    <nes-balloon from="right">
+      Welcome {{ whiteName }} & {{ blackName }} to the game!
+      <br />
+      This is a NES-style UI for the game of chess.
+    </nes-balloon>
+    <img
+      src="https://api.dicebear.com/6.x/pixel-art/svg?seed=Max"
+      alt="avatar"
+    />
+  </div>
+</div>

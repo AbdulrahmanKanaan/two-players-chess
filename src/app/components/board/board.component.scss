@@ -1,0 +1,17 @@
+.player-container {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: 10px;
+}
+
+iframe {
+  width: 400px;
+  height: 410px;
+  margin: 10px;
+}
+
+.bg-white {
+  background-color: white;
+}
