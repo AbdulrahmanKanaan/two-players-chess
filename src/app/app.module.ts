@@ -3,10 +3,16 @@ import { BrowserModule } from '@angular/platform-browser';
 
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
+import { HomeComponent } from './pages/home/home.component';
+import { MainPageComponent } from './pages/main-page/main-page.component';
+import { IFramePageComponent } from './pages/iframe-page/iframe-page.component';
 
 @NgModule({
   declarations: [
-    AppComponent
+    AppComponent,
+    HomeComponent,
+    MainPageComponent,
+    IFramePageComponent
   ],
   imports: [
     BrowserModule,
