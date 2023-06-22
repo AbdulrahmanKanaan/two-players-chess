@@ -27,8 +27,8 @@ export class BoardComponent implements OnInit, OnDestroy {
   @Input({ required: true }) public playerName: string = '';
   @Input({ required: true }) public playerColor: string = '';
 
-  @ViewChild('frame', { static: true })
-  frame!: ElementRef<HTMLIFrameElement>;
+  @ViewChild('frame')
+  private frame!: ElementRef<HTMLIFrameElement>;
 
   public iFrameUrl?: SafeResourceUrl;
 
@@ -40,7 +40,9 @@ export class BoardComponent implements OnInit, OnDestroy {
     );
     const color = this.playerColor as 'white' | 'black';
     const moveObservable: Observable<Move> = this.chessEngine[`${color}$`];
-    this.moveObserver = moveObservable.subscribe(this.moveListener.bind(this));
+    this.moveObserver = moveObservable.subscribe((move) =>
+      this.moveListener(move)
+    );
   }
 
   ngOnDestroy(): void {
