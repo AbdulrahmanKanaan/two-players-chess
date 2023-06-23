@@ -70,12 +70,12 @@ export class MessagesFactory {
   }
 
   private getNormalMoveMessage(move: Move): string {
-    const playerName = move.turn === 'white' ? this.whiteName : this.blackName;
-    const otherPlayer = move.turn === 'white' ? this.blackName : this.whiteName;
+    const playerColor = move.turn;
+    const otherColor = move.turn === 'white' ? 'black' : 'white';
     const variations = [
-      `Good move, ${playerName}! ${otherPlayer} it's your turn now`,
+      `Good move, ${playerColor}! ${otherColor} it's your turn now`,
       'Nice move!',
-      `${otherPlayer} it's your turn!`,
+      `${otherColor} it's your turn!`,
       'Well played!',
     ];
     return this.getRandomMessage(variations);

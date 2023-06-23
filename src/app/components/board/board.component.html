@@ -1,6 +1,11 @@
 <div class="player-container">
   <app-player-name>{{ playerName }}</app-player-name>
-  <nes-container [rounded]="true" class="bg-white" *ngIf="iFrameUrl">
-    <iframe #frame [src]="iFrameUrl" frameborder="0"></iframe>
+  <nes-container [rounded]="true" class="frame-container" *ngIf="iFrameUrl">
+    <iframe
+      #frame
+      [src]="iFrameUrl"
+      frameborder="0"
+      [class.disabled]="!isMyTurn"
+    ></iframe>
   </nes-container>
 </div>

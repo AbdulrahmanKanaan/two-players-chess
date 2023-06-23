@@ -6,7 +6,7 @@ import {
   PlayerColors,
   StorageKeys,
 } from '../../constants';
-import { GameEvent, Move, SavedGame } from '../../types';
+import { GameEvent, Move, PlayerColor, SavedGame } from '../../types';
 import { StorageService } from '../storage/storage.service';
 
 @Injectable({
@@ -15,7 +15,7 @@ import { StorageService } from '../storage/storage.service';
 export class ChessEngineService {
   private _pgn: string = '';
   private _fen: string = '';
-  private _turn: string = PlayerColors.WHITE;
+  private _turn: PlayerColor = PlayerColors.WHITE;
   private _moves: Move[] = [];
   public whiteName: string = '';
   public blackName: string = '';
@@ -116,7 +116,7 @@ export class ChessEngineService {
     this.setPlayerNames(game.whiteName, game.blackName);
     this._fen = game.fen;
     this._pgn = game.pgn;
-    this._turn = game.turn;
+    this._turn = game.turn as PlayerColor;
 
     // if old game exists fire event
     if (game.pgn) {

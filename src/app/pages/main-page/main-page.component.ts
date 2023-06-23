@@ -8,9 +8,20 @@ import { Router } from '@angular/router';
 import { NesDialogService } from 'ngx-nes-css';
 import { Subscription } from 'rxjs';
 import { GameFinishedDialogComponent } from 'src/app/components/game-finished-dialog/game-finished-dialog.component';
-import { GameEvents, GameStatuses, actions } from 'src/app/constants';
+import {
+  GameEvents,
+  GameStatuses,
+  PlayerColors,
+  actions,
+} from 'src/app/constants';
 import { ChessEngineService } from 'src/app/services/chess-engine/chess-engine.service';
-import { GameEvent, GameStatus, Message, Move } from 'src/app/types';
+import {
+  GameEvent,
+  GameStatus,
+  Message,
+  Move,
+  PlayerColor,
+} from 'src/app/types';
 
 @Component({
   selector: 'app-main-page',
@@ -18,6 +29,8 @@ import { GameEvent, GameStatus, Message, Move } from 'src/app/types';
   styleUrls: ['./main-page.component.scss'],
 })
 export class MainPageComponent implements AfterViewInit, OnDestroy {
+  PlayerColors = PlayerColors;
+
   public gameStatus: GameStatus = GameStatuses.IN_PROGRESS;
 
   public get isFinished(): boolean {
@@ -26,6 +39,10 @@ export class MainPageComponent implements AfterViewInit, OnDestroy {
 
   public whiteName: string = '';
   public blackName: string = '';
+
+  public get turn(): PlayerColor {
+    return this.chessEngine.turn;
+  }
 
   private eventsSubscription?: Subscription;
 

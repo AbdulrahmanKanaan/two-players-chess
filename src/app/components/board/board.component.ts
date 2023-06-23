@@ -32,6 +32,7 @@ export class BoardComponent implements OnInit, OnDestroy {
 
   @Input({ required: true }) public playerName: string = '';
   @Input({ required: true }) public playerColor: string = '';
+  @Input({ required: true }) public isMyTurn?: boolean;
 
   @ViewChild('frame')
   private frame!: ElementRef<HTMLIFrameElement>;
