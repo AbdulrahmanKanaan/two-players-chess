@@ -72,7 +72,7 @@ export class IFramePageComponent implements OnInit {
       data: move,
     };
 
-    window.parent.postMessage(message, `${environment.appUrl}`);
+    window.parent.postMessage(message, `*`);
   }
 
   private loadGame(game: SavedGame) {
