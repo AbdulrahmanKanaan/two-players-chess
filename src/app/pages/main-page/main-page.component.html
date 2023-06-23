@@ -4,6 +4,8 @@
     <app-board [playerName]="blackName" playerColor="black" />
   </div>
 
+  <button nes-button (click)="onResetClick()">Reset Test</button>
+
   <div class="baloon">
     <nes-balloon from="right">
       Welcome {{ whiteName }} & {{ blackName }}!

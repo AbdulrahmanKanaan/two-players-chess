@@ -1,6 +1,10 @@
 import { Component, HostListener, OnInit, ViewChild } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
-import { MoveChange, NgxChessBoardComponent } from 'ngx-chess-board';
+import {
+  MoveChange,
+  NgxChessBoardComponent,
+  NgxChessBoardService,
+} from 'ngx-chess-board';
 import { PlayerColors, actions } from 'src/app/constants';
 import { Message, Move, SavedGame } from 'src/app/types';
 import { environment } from 'src/environments/environment';
@@ -17,7 +21,10 @@ export class IFramePageComponent implements OnInit {
 
   @ViewChild('board', { static: true }) board!: NgxChessBoardComponent;
 
-  constructor(private readonly route: ActivatedRoute) {}
+  constructor(
+    private readonly route: ActivatedRoute,
+    private readonly ngxChessService: NgxChessBoardService
+  ) {}
 
   ngOnInit(): void {
     this.route.queryParams.subscribe((params) => {
@@ -38,6 +45,9 @@ export class IFramePageComponent implements OnInit {
         break;
       case actions.LOAD:
         this.loadGame(data);
+        break;
+      case actions.RESET:
+        this.onReset();
         break;
       default:
         console.log('Unknown channel');
@@ -70,6 +80,12 @@ export class IFramePageComponent implements OnInit {
 
   private loadGame(game: SavedGame) {
     this.board.setPGN(game.pgn);
+    this.color === PlayerColors.BLACK && this.board.reverse();
+  }
+
+  public onReset() {
+    this.board.reset();
+    this.ngxChessService.reset();
     this.color === PlayerColors.BLACK && this.board.reverse();
   }
 }

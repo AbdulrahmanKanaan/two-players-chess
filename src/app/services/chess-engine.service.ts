@@ -93,10 +93,7 @@ export class ChessEngineService {
       date: date,
     };
 
-    this.storageService.set(
-      StorageKeys.CURRENT_GAME,
-      JSON.stringify(game)
-    );
+    this.storageService.set(StorageKeys.CURRENT_GAME, JSON.stringify(game));
   }
 
   public loadGame() {
@@ -129,5 +126,14 @@ export class ChessEngineService {
   public setPlayerNames(whiteName: string, blackName: string) {
     this.whiteName = whiteName;
     this.blackName = blackName;
+  }
+
+  public resetGame() {
+    this._pgn = '';
+    this._fen = '';
+    this._turn = PlayerColors.WHITE;
+    this._moves = [];
+    this.storageService.del(StorageKeys.CURRENT_GAME);
+    this.eventsSubject.next({ name: GameEvents.RESET_GAME });
   }
 }

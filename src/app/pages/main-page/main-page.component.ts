@@ -44,7 +44,7 @@ export class MainPageComponent implements AfterViewInit, OnDestroy {
       this.chessEngine.setPlayerNames(whiteName, blackName);
     }
     this.eventsSubscription = this.chessEngine.events$.subscribe((event) =>
-      this.handleEvent(event)
+      this.gameEventsListener(event)
     );
   }
 
@@ -80,15 +80,32 @@ export class MainPageComponent implements AfterViewInit, OnDestroy {
     this.chessEngine.move(move);
   }
 
-  private handleEvent(event: GameEvent) {
+  private gameEventsListener(event: GameEvent) {
     switch (event.name) {
       case GameEvents.GAME_FINISHED:
-        this.gameStatus = event.data;
-        this.dialogService.open({
-          component: GameFinishedDialogComponent,
-          data: { gameStatus: this.gameStatus },
-        });
+        this.handleGameFinished(event.data);
+        break;
+      case GameEvents.RESET_GAME:
+        this.handleReset();
         break;
     }
+  }
+
+  private handleGameFinished(
+    gameStatus: (typeof GameStatuses)[keyof typeof GameStatuses]
+  ) {
+    this.gameStatus = gameStatus;
+    this.dialogService.open({
+      component: GameFinishedDialogComponent,
+      data: { gameStatus: this.gameStatus },
+    });
+  }
+
+  public handleReset(): void {
+    this.gameStatus = GameStatuses.IN_PROGRESS;
+  }
+
+  public onResetClick(): void {
+    this.chessEngine.resetGame();
   }
 }

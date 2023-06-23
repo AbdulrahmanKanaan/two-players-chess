@@ -78,6 +78,10 @@ export class BoardComponent implements OnInit, OnDestroy {
     switch (event.name) {
       case GameEvents.LOAD_GAME:
         this.loadGame(event.data);
+        break;
+      case GameEvents.RESET_GAME:
+        this.postMessage({ action: actions.RESET });
+        break;
     }
   }
 
