@@ -1,5 +1,6 @@
 import { Component } from '@angular/core';
 import { Router } from '@angular/router';
+import { StorageKeys } from 'src/app/constants';
 import { StorageService } from 'src/app/services/storage.service';
 
 @Component({
@@ -14,7 +15,7 @@ export class HomeComponent {
     private readonly router: Router,
     private readonly storageService: StorageService
   ) {
-    this.oldGame = this.storageService.get('currentGame');
+    this.oldGame = this.storageService.get(StorageKeys.CURRENT_GAME);
   }
 
   public get canLoadGame(): boolean {
@@ -22,7 +23,7 @@ export class HomeComponent {
   }
 
   public onNewGameClick(): void {
-    this.storageService.del('currentGame');
+    this.storageService.del(StorageKeys.CURRENT_GAME);
     this.router.navigate(['mainpage'], {
       state: { whiteName: 'Mazen', blackName: 'Mezo' },
     });

@@ -1,6 +1,11 @@
 import { Injectable } from '@angular/core';
 import { Subject, filter } from 'rxjs';
-import { GameEvents, GameStatuses, PlayerColors } from '../constants';
+import {
+  GameEvents,
+  GameStatuses,
+  StorageKeys,
+  PlayerColors,
+} from '../constants';
 import { GameEvent, Move, SavedGame } from '../types';
 import { StorageService } from './storage.service';
 
@@ -78,6 +83,7 @@ export class ChessEngineService {
 
   public saveGame() {
     const date = new Date();
+
     const game: SavedGame = {
       pgn: this._pgn,
       fen: this._fen,
@@ -86,16 +92,14 @@ export class ChessEngineService {
       turn: this.turn,
       date: date,
     };
-    const key = `${this.whiteName} vs. ${
-      this.blackName
-    } - ${date.toLocaleString()}`;
-    this.storageService.set(key, JSON.stringify(game));
-    this.storageService.set('currentGame', key);
+
+    this.storageService.set(
+      StorageKeys.CURRENT_GAME,
+      JSON.stringify(game)
+    );
   }
 
   public loadGame() {
-    const currentGameKey = this.storageService.get('currentGame');
-    if (!currentGameKey) return;
     const emptyGame: SavedGame = {
       pgn: '',
       fen: '',
@@ -104,10 +108,17 @@ export class ChessEngineService {
       turn: '',
       date: new Date(),
     };
-    const stringifiedGame = this.storageService.get(currentGameKey, emptyGame);
+
+    const stringifiedGame = this.storageService.get(
+      StorageKeys.CURRENT_GAME,
+      emptyGame
+    );
+
     const game = JSON.parse(stringifiedGame) as SavedGame;
+
     // no game data to load
     if (!game.pgn) return;
+
     this.setPlayerNames(game.whiteName, game.blackName);
     this._fen = game.fen;
     this._pgn = game.pgn;
