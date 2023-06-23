@@ -1,11 +1,11 @@
 import { ChangeDetectionStrategy, Component } from '@angular/core';
 import { NesDialogRef } from 'ngx-nes-css';
 import { GameStatuses } from 'src/app/constants';
+import { GameStatus } from 'src/app/types';
 
 export type DialogDefaultParams = {
-  canceled: () => void;
-  confirmed: () => void;
-  gameStatus: (typeof GameStatuses)[keyof typeof GameStatuses];
+  startNewGame: () => void;
+  gameStatus: GameStatus;
 };
 
 @Component({
@@ -17,7 +17,7 @@ export type DialogDefaultParams = {
 export class GameFinishedDialogComponent {
   constructor(private readonly _dialogRef: NesDialogRef<DialogDefaultParams>) {}
 
-  public get gameStatus(): (typeof GameStatuses)[keyof typeof GameStatuses] {
+  public get gameStatus(): GameStatus {
     return this._dialogRef.data?.gameStatus ?? GameStatuses.IN_PROGRESS;
   }
 
@@ -34,12 +34,7 @@ export class GameFinishedDialogComponent {
     }
   }
 
-  onCancelClick(): void {
-    console.log(123);
-    // this._dialogRef.data?.canceled();
-  }
-
-  onConfirmClick(): void {
-    this._dialogRef.data?.confirmed();
+  onNewGameClick(): void {
+    this._dialogRef.data?.startNewGame();
   }
 }

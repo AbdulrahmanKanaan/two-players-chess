@@ -1,0 +1,7 @@
+<nes-container [rounded]="true" class="container">
+  <div class="btn-container">
+    <button nes-button (click)="goHome()" color="primary">Home</button>
+    <button nes-button (click)="newGame()" color="success">New Game</button>
+    <button nes-button (click)="undo()" color="warning" [disabled]="true">Undo</button>
+  </div>
+</nes-container>

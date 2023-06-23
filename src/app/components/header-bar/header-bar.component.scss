@@ -1,0 +1,18 @@
+@use "../../../styles/variables.scss" as v;
+
+.container {
+  background-color: white;
+  display: block;
+  width: 900px;
+
+  @media screen and (max-width: v.$breakpoint) {
+    width: fit-content;
+  }
+
+  .btn-container {
+    width: 100%;
+    display: flex;
+    justify-content: flex-start;
+    gap: 10px;
+  }
+}

@@ -3,8 +3,8 @@ import { Subject, filter } from 'rxjs';
 import {
   GameEvents,
   GameStatuses,
-  StorageKeys,
   PlayerColors,
+  StorageKeys,
 } from '../constants';
 import { GameEvent, Move, SavedGame } from '../types';
 import { StorageService } from './storage.service';
@@ -17,8 +17,8 @@ export class ChessEngineService {
   private _fen: string = '';
   private _turn: string = PlayerColors.WHITE;
   private _moves: Move[] = [];
-  private whiteName: string = '';
-  private blackName: string = '';
+  public whiteName: string = '';
+  public blackName: string = '';
 
   private moveSubject: Subject<Move> = new Subject<Move>();
   public move$ = this.moveSubject.asObservable();
@@ -100,9 +100,9 @@ export class ChessEngineService {
     const emptyGame: SavedGame = {
       pgn: '',
       fen: '',
-      blackName: '',
-      whiteName: '',
-      turn: '',
+      blackName: this.blackName,
+      whiteName: this.whiteName,
+      turn: PlayerColors.WHITE,
       date: new Date(),
     };
 
@@ -113,14 +113,14 @@ export class ChessEngineService {
 
     const game = JSON.parse(stringifiedGame) as SavedGame;
 
-    // no game data to load
-    if (!game.pgn) return;
-
     this.setPlayerNames(game.whiteName, game.blackName);
     this._fen = game.fen;
     this._pgn = game.pgn;
     this._turn = game.turn;
-    this.eventsSubject.next({ name: GameEvents.LOAD_GAME, data: game });
+
+    // if old game exists fire event
+    if (game.pgn)
+      this.eventsSubject.next({ name: GameEvents.LOAD_GAME, data: game });
   }
 
   public setPlayerNames(whiteName: string, blackName: string) {

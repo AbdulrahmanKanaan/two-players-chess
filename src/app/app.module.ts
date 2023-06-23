@@ -7,11 +7,13 @@ import { HomeComponent } from './pages/home/home.component';
 import { MainPageComponent } from './pages/main-page/main-page.component';
 import { IFramePageComponent } from './pages/iframe-page/iframe-page.component';
 import { NesModule } from 'ngx-nes-css';
-import { ButtonComponent } from './components/button/button.component';
 import { NgxChessBoardModule } from 'ngx-chess-board';
 import { PlayerNameComponent } from './components/player-name/player-name.component';
 import { BoardComponent } from './components/board/board.component';
 import { GameFinishedDialogComponent } from './components/game-finished-dialog/game-finished-dialog.component';
+import { HeaderBarComponent } from './components/header-bar/header-bar.component';
+import { NamesDialogComponent } from './components/names-dialog/names-dialog.component';
+import { FormsModule } from '@angular/forms';
 
 @NgModule({
   declarations: [
@@ -19,12 +21,14 @@ import { GameFinishedDialogComponent } from './components/game-finished-dialog/g
     HomeComponent,
     MainPageComponent,
     IFramePageComponent,
-    ButtonComponent,
     PlayerNameComponent,
     BoardComponent,
     GameFinishedDialogComponent,
+    HeaderBarComponent,
+    NamesDialogComponent,
   ],
   imports: [
+    FormsModule,
     BrowserModule,
     AppRoutingModule,
     NesModule,

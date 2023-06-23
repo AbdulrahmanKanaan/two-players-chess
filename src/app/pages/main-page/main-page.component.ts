@@ -3,7 +3,6 @@ import {
   Component,
   HostListener,
   OnDestroy,
-  OnInit,
 } from '@angular/core';
 import { Router } from '@angular/router';
 import { NesDialogService } from 'ngx-nes-css';
@@ -11,7 +10,7 @@ import { Subscription } from 'rxjs';
 import { GameFinishedDialogComponent } from 'src/app/components/game-finished-dialog/game-finished-dialog.component';
 import { GameEvents, GameStatuses, actions } from 'src/app/constants';
 import { ChessEngineService } from 'src/app/services/chess-engine.service';
-import { GameEvent, Message, Move } from 'src/app/types';
+import { GameEvent, GameStatus, Message, Move } from 'src/app/types';
 
 @Component({
   selector: 'app-main-page',
@@ -19,15 +18,14 @@ import { GameEvent, Message, Move } from 'src/app/types';
   styleUrls: ['./main-page.component.scss'],
 })
 export class MainPageComponent implements AfterViewInit, OnDestroy {
-  public whiteName: string = 'Player One';
-  public blackName: string = 'Player Two';
-
-  public gameStatus: (typeof GameStatuses)[keyof typeof GameStatuses] =
-    GameStatuses.IN_PROGRESS;
+  public gameStatus: GameStatus = GameStatuses.IN_PROGRESS;
 
   public get isFinished(): boolean {
     return this.gameStatus !== GameStatuses.IN_PROGRESS;
   }
+
+  public whiteName: string = '';
+  public blackName: string = '';
 
   private eventsSubscription?: Subscription;
 
@@ -39,8 +37,9 @@ export class MainPageComponent implements AfterViewInit, OnDestroy {
     const navigationState = this.router.getCurrentNavigation()?.extras.state;
     if (navigationState) {
       const { whiteName, blackName } = navigationState;
-      this.whiteName = whiteName ?? this.whiteName;
-      this.blackName = blackName ?? this.blackName;
+      console.log(navigationState)
+      this.whiteName = whiteName;
+      this.blackName = blackName;
       this.chessEngine.setPlayerNames(whiteName, blackName);
     }
     this.eventsSubscription = this.chessEngine.events$.subscribe((event) =>
@@ -91,13 +90,17 @@ export class MainPageComponent implements AfterViewInit, OnDestroy {
     }
   }
 
-  private handleGameFinished(
-    gameStatus: (typeof GameStatuses)[keyof typeof GameStatuses]
-  ) {
+  private handleGameFinished(gameStatus: GameStatus) {
     this.gameStatus = gameStatus;
-    this.dialogService.open({
+    const dialogRef = this.dialogService.open({
       component: GameFinishedDialogComponent,
-      data: { gameStatus: this.gameStatus },
+      data: {
+        gameStatus: this.gameStatus,
+        startNewGame: () => {
+          this.onResetClick();
+          dialogRef.close();
+        },
+      },
     });
   }
 
@@ -107,5 +110,11 @@ export class MainPageComponent implements AfterViewInit, OnDestroy {
 
   public onResetClick(): void {
     this.chessEngine.resetGame();
+  }
+
+  onGoHomeClick() {
+    if (this.chessEngine.pgn) this.chessEngine.saveGame();
+    else this.chessEngine.resetGame();
+    this.router.navigate(['/']);
   }
 }

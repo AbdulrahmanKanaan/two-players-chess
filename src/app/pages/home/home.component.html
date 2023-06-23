@@ -2,10 +2,10 @@
   <nes-container [rounded]="true" class="game-title">
     <h1>Two Players Chess</h1>
   </nes-container>
-  <app-button nes-button [color]="'primary'" (onClick)="onNewGameClick()"
-    >New Game</app-button
-  >
-  <app-button nes-button [disabled]="canLoadGame" (onClick)="onLoadGameClick()"
-    >Load Game</app-button
-  >
+  <button nes-button [color]="'primary'" (click)="onNewGameClick()">
+    New Game
+  </button>
+  <button nes-button [disabled]="canLoadGame" (click)="onLoadGameClick()">
+    Load Game
+  </button>
 </div>

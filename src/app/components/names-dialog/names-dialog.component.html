@@ -1,0 +1,18 @@
+<nes-dialog [rounded]="true">
+  <nes-input-field id="whiteName" label="White Player Name">
+    <input nes-input type="text" [(ngModel)]="whiteName" />
+  </nes-input-field>
+  <br />
+  <nes-input-field id="blackName" label="Black Player Name">
+    <input nes-input [(ngModel)]="blackName" />
+  </nes-input-field>
+  <br />
+  <button
+    nes-button
+    class="submit-btn"
+    color="primary"
+    (click)="onStartClick()"
+  >
+    Start
+  </button>
+</nes-dialog>

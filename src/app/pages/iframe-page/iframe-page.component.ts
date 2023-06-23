@@ -1,10 +1,6 @@
 import { Component, HostListener, OnInit, ViewChild } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
-import {
-  MoveChange,
-  NgxChessBoardComponent,
-  NgxChessBoardService,
-} from 'ngx-chess-board';
+import { NgxChessBoardComponent, NgxChessBoardService } from 'ngx-chess-board';
 import { PlayerColors, actions } from 'src/app/constants';
 import { Message, Move, SavedGame } from 'src/app/types';
 import { environment } from 'src/environments/environment';
