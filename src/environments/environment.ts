@@ -1,4 +1,4 @@
 export const environment = {
   production: true,
-  appUrl: '',
+  appUrl: 'https://two-players-chess.web.app',
 };

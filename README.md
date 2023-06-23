@@ -16,4 +16,4 @@ npm run start
 
 ## Demo
 
-you can find the demo here <http://google.com>
+you can find the demo here <https://two-players-chess.web.app>
