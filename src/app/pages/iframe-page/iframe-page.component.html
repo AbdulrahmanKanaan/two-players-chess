@@ -1,11 +1,12 @@
 <div class="container">
   <ngx-chess-board
     #board
-    [size]="400"
+    [size]="size"
     darkTileColor="saddlebrown"
     lightTileColor="antiquewhite"
     [lightDisabled]="color === PlayerColors.BLACK"
     [darkDisabled]="color === PlayerColors.WHITE"
     (moveChange)="onMove($event)"
+    class="chess-board"
   ></ngx-chess-board>
 </div>

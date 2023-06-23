@@ -15,6 +15,8 @@ export class IFramePageComponent implements OnInit {
 
   public color?: PlayerColor;
 
+  public size: number = 400;
+
   @ViewChild('board', { static: true }) board!: NgxChessBoardComponent;
 
   constructor(
@@ -27,6 +29,10 @@ export class IFramePageComponent implements OnInit {
       this.color = params['color'];
       this.color === PlayerColors.BLACK && this.board.reverse();
     });
+    const outerWidth = window.outerWidth;
+    if (outerWidth < 400) {
+      this.size = 300;
+    }
   }
 
   private isLoadingState: boolean = false;
