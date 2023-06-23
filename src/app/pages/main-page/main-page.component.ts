@@ -54,7 +54,6 @@ export class MainPageComponent implements AfterViewInit, OnDestroy {
     const navigationState = this.router.getCurrentNavigation()?.extras.state;
     if (navigationState) {
       const { whiteName, blackName } = navigationState;
-      console.log(navigationState);
       this.whiteName = whiteName;
       this.blackName = blackName;
       this.chessEngine.setPlayerNames(whiteName, blackName);

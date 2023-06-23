@@ -17,6 +17,7 @@ export class ChessEngineService {
   private _fen: string = '';
   private _turn: PlayerColor = PlayerColors.WHITE;
   private _moves: Move[] = [];
+
   public whiteName: string = '';
   public blackName: string = '';
 
@@ -122,7 +123,7 @@ export class ChessEngineService {
     if (game.pgn) {
       this.eventsSubject.next({ name: GameEvents.LOAD_GAME, data: game });
     } else {
-      this.eventsSubject.next({ name: GameEvents.NEW_GAME });
+      this.eventsSubject.next({ name: GameEvents.NEW_GAME, data: game });
     }
   }
 

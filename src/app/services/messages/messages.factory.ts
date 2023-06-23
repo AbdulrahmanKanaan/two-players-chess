@@ -1,8 +1,18 @@
+import { Injectable } from '@angular/core';
 import { GameEvents } from 'src/app/constants';
 import { GameEvent, Move } from 'src/app/types';
 
+@Injectable({
+  providedIn: 'root',
+})
 export class MessagesFactory {
-  constructor(private whiteName: string, private blackName: string) {}
+  private whiteName: string = '';
+  private blackName: string = '';
+
+  public setNames(whiteName: string, blackName: string) {
+    this.whiteName = whiteName;
+    this.blackName = blackName;
+  }
 
   public getEventMessage(event: GameEvent): string {
     switch (event.name) {
