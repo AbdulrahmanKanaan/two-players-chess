@@ -2,7 +2,7 @@ import { Component, HostListener, OnInit, ViewChild } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { MoveChange, NgxChessBoardComponent } from 'ngx-chess-board';
 import { actions } from 'src/app/constants';
-import { Message, Move } from 'src/app/types';
+import { Message, Move, SavedGame } from 'src/app/types';
 import { environment } from 'src/environments/environment';
 
 @Component({
@@ -34,11 +34,11 @@ export class IFramePageComponent implements OnInit {
       case actions.MOVE:
         this.board.move(data.move);
         break;
-      case 'initializeBoard':
-        this.board.setPGN(data.pgn);
+      case actions.LOAD:
+        this.loadGame(data);
         break;
       default:
-        console.info('Unknown channel');
+        console.log('Unknown channel');
     }
     this.isLoadingState = false;
   }
@@ -64,5 +64,10 @@ export class IFramePageComponent implements OnInit {
     };
 
     window.parent.postMessage(message, `${environment.appUrl}`);
+  }
+
+  private loadGame(game: SavedGame) {
+    this.board.setPGN(game.pgn);
+    this.color === 'black' && this.board.reverse();
   }
 }

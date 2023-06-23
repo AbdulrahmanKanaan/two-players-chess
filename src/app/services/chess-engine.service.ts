@@ -1,6 +1,9 @@
 import { Injectable } from '@angular/core';
 import { Subject } from 'rxjs';
-import { Move } from '../types';
+import { Move, SavedGame } from '../types';
+import { StorageService } from './storage.service';
+import { GameEvent } from '../types';
+import { GameEvents } from '../constants';
 
 @Injectable({
   providedIn: 'root',
@@ -10,22 +13,27 @@ export class ChessEngineService {
   private _fen: string = '';
   private _turn: string = 'white';
   private _moves: Move[] = [];
+  private whiteName: string = '';
+  private blackName: string = '';
 
-  private _whiteSubject: Subject<Move> = new Subject<Move>();
-  private _blackSubject: Subject<Move> = new Subject<Move>();
+  private whiteSubject: Subject<Move> = new Subject<Move>();
+  public white$ = this.whiteSubject.asObservable();
 
-  public white$ = this._whiteSubject.asObservable();
-  public black$ = this._blackSubject.asObservable();
+  private blackSubject: Subject<Move> = new Subject<Move>();
+  public black$ = this.blackSubject.asObservable();
 
-  constructor() {}
+  private eventsSubject: Subject<GameEvent> = new Subject<GameEvent>();
+  public events$ = this.eventsSubject.asObservable();
+
+  constructor(private readonly storageService: StorageService) {}
 
   public move(move: Move) {
     this._moves.push(move);
     this._pgn = move.pgn;
     this._fen = move.fen;
-    const subject =
-      this._turn === 'white' ? this._blackSubject : this._whiteSubject;
-    subject.next(move);
+    const playerSubject =
+      this._turn === 'white' ? this.blackSubject : this.whiteSubject;
+    playerSubject.next(move);
     this._turn = this._turn === 'white' ? 'black' : 'white';
   }
 
@@ -41,23 +49,49 @@ export class ChessEngineService {
     this._pgn = pgn;
   }
 
-  public moveToObject(move: string): {
-    from: string;
-    to: string;
-    promotion: string;
-  } {
-    const moveChunks: string[] = [];
-    const chunkSize = 2;
-    for (let i = 0; i < move.length; i += chunkSize) {
-      moveChunks.push(move.slice(i, i + chunkSize));
-    }
-    const [from, to, promotion] = moveChunks;
-    const promotions: Record<string, string> = {
-      '1': 'q',
-      '2': 'r',
-      '3': 'b',
-      '4': 'k',
+  private isGameOver(move: Move): boolean {
+    return move.checkmate || move.stalemate;
+  }
+
+  public saveGame() {
+    const date = new Date();
+    const game: SavedGame = {
+      pgn: this._pgn,
+      fen: this._fen,
+      whiteName: this.whiteName,
+      blackName: this.blackName,
+      turn: this.turn,
+      date: date,
     };
-    return { from, to, promotion: promotions[promotion] };
+    const key = `${this.whiteName} vs. ${
+      this.blackName
+    } - ${date.toLocaleString()}`;
+    this.storageService.set(key, JSON.stringify(game));
+    this.storageService.set('currentGame', key);
+  }
+
+  public loadGame() {
+    const currentGameKey = this.storageService.get('currentGame');
+    if (!currentGameKey) return;
+    const emptyGame: SavedGame = {
+      pgn: '',
+      fen: '',
+      blackName: '',
+      whiteName: '',
+      turn: '',
+      date: new Date(),
+    };
+    const stringifiedGame = this.storageService.get(currentGameKey, emptyGame);
+    const game = JSON.parse(stringifiedGame) as SavedGame;
+    // no game data to load
+    if (!game.pgn) return;
+    this.setPlayerNames(game.whiteName, game.blackName);
+    this._turn = game.turn;
+    this.eventsSubject.next({ name: GameEvents.LOAD_GAME, data: game });
+  }
+
+  public setPlayerNames(whiteName: string, blackName: string) {
+    this.whiteName = whiteName;
+    this.blackName = blackName;
   }
 }

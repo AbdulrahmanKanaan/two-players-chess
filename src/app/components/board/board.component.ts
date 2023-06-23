@@ -7,10 +7,10 @@ import {
   ViewChild,
 } from '@angular/core';
 import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser';
-import { Observable, Observer, Subscription } from 'rxjs';
-import { actions } from 'src/app/constants';
+import { Observable, Subscription } from 'rxjs';
+import { GameEvents, actions } from 'src/app/constants';
 import { ChessEngineService } from 'src/app/services/chess-engine.service';
-import { Message, Move } from 'src/app/types';
+import { GameEvent, Message, Move, SavedGame } from 'src/app/types';
 import { environment } from 'src/environments/environment';
 
 @Component({
@@ -33,6 +33,7 @@ export class BoardComponent implements OnInit, OnDestroy {
   public iFrameUrl?: SafeResourceUrl;
 
   private moveObserver?: Subscription;
+  private gameEventsObserver?: Subscription;
 
   ngOnInit(): void {
     this.iFrameUrl = this.sanitizer.bypassSecurityTrustResourceUrl(
@@ -43,10 +44,19 @@ export class BoardComponent implements OnInit, OnDestroy {
     this.moveObserver = moveObservable.subscribe((move) =>
       this.moveListener(move)
     );
+    this.gameEventsObserver = this.chessEngine.events$.subscribe((event) => {
+      console.log(event);
+      return this.gameEventsListener(event);
+    });
   }
 
   ngOnDestroy(): void {
     this.moveObserver?.unsubscribe();
+    this.gameEventsObserver?.unsubscribe();
+  }
+
+  private postMessage<T>(message: Message<T>) {
+    this.frame.nativeElement.contentWindow?.postMessage(message, '*');
   }
 
   private moveListener(move: Move) {
@@ -54,6 +64,20 @@ export class BoardComponent implements OnInit, OnDestroy {
       action: actions.MOVE,
       data: move,
     };
-    this.frame.nativeElement.contentWindow?.postMessage(message, '*');
+    this.postMessage(message);
+  }
+
+  private gameEventsListener(event: GameEvent) {
+    switch (event.name) {
+      case GameEvents.LOAD_GAME:
+        this.loadGame(event.data);
+    }
+  }
+
+  private loadGame(game: SavedGame) {
+    this.playerName =
+      this.playerColor === 'white' ? game.whiteName : game.blackName;
+    this.frame.nativeElement.onload = () =>
+      this.postMessage({ action: actions.LOAD, data: game });
   }
 }

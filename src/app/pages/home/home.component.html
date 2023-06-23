@@ -5,5 +5,7 @@
   <app-button nes-button [color]="'primary'" (onClick)="onNewGameClick()"
     >New Game</app-button
   >
-  <app-button nes-button [disabled]="true">Load Game</app-button>
+  <app-button nes-button [disabled]="canLoadGame" (onClick)="onLoadGameClick()"
+    >Load Game</app-button
+  >
 </div>
