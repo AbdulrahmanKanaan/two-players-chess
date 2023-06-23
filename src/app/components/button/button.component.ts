@@ -1,5 +1,5 @@
 import { Component, EventEmitter, Input, Output } from '@angular/core';
-import { ButtonColors } from './types';
+import { ButtonColors } from './btn-types';
 
 @Component({
   selector: 'app-button',

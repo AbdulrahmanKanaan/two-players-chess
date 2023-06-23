@@ -1,9 +1,8 @@
 import { Injectable } from '@angular/core';
-import { Subject } from 'rxjs';
-import { Move, SavedGame } from '../types';
+import { Subject, filter } from 'rxjs';
+import { GameEvents, GameStatuses, PlayerColors } from '../constants';
+import { GameEvent, Move, SavedGame } from '../types';
 import { StorageService } from './storage.service';
-import { GameEvent } from '../types';
-import { GameEvents } from '../constants';
 
 @Injectable({
   providedIn: 'root',
@@ -11,16 +10,21 @@ import { GameEvents } from '../constants';
 export class ChessEngineService {
   private _pgn: string = '';
   private _fen: string = '';
-  private _turn: string = 'white';
+  private _turn: string = PlayerColors.WHITE;
   private _moves: Move[] = [];
   private whiteName: string = '';
   private blackName: string = '';
 
-  private whiteSubject: Subject<Move> = new Subject<Move>();
-  public white$ = this.whiteSubject.asObservable();
+  private moveSubject: Subject<Move> = new Subject<Move>();
+  public move$ = this.moveSubject.asObservable();
 
-  private blackSubject: Subject<Move> = new Subject<Move>();
-  public black$ = this.blackSubject.asObservable();
+  public black$ = this.moveSubject
+    .asObservable()
+    .pipe(filter(() => this.turn === PlayerColors.WHITE));
+
+  public white$ = this.moveSubject
+    .asObservable()
+    .pipe(filter(() => this.turn === PlayerColors.BLACK));
 
   private eventsSubject: Subject<GameEvent> = new Subject<GameEvent>();
   public events$ = this.eventsSubject.asObservable();
@@ -31,10 +35,18 @@ export class ChessEngineService {
     this._moves.push(move);
     this._pgn = move.pgn;
     this._fen = move.fen;
-    const playerSubject =
-      this._turn === 'white' ? this.blackSubject : this.whiteSubject;
-    playerSubject.next(move);
-    this._turn = this._turn === 'white' ? 'black' : 'white';
+    this.moveSubject.next(move);
+
+    this.isGameOver(move) &&
+      this.eventsSubject.next({
+        name: GameEvents.GAME_FINISHED,
+        data: this.gameStatus(move),
+      });
+
+    this._turn =
+      this._turn === PlayerColors.WHITE
+        ? PlayerColors.BLACK
+        : PlayerColors.WHITE;
   }
 
   public get turn() {
@@ -51,6 +63,17 @@ export class ChessEngineService {
 
   private isGameOver(move: Move): boolean {
     return move.checkmate || move.stalemate;
+  }
+
+  private gameStatus(move: Move): string {
+    if (move.checkmate)
+      return this._turn === PlayerColors.WHITE
+        ? GameStatuses.WHITE_WINS
+        : GameStatuses.BLACK_WINS;
+
+    if (move.stalemate) return GameStatuses.DRAW;
+
+    return GameStatuses.IN_PROGRESS;
   }
 
   public saveGame() {
@@ -86,6 +109,8 @@ export class ChessEngineService {
     // no game data to load
     if (!game.pgn) return;
     this.setPlayerNames(game.whiteName, game.blackName);
+    this._fen = game.fen;
+    this._pgn = game.pgn;
     this._turn = game.turn;
     this.eventsSubject.next({ name: GameEvents.LOAD_GAME, data: game });
   }

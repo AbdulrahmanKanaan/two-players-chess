@@ -8,9 +8,15 @@ import {
 } from '@angular/core';
 import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser';
 import { Observable, Subscription } from 'rxjs';
-import { GameEvents, actions } from 'src/app/constants';
+import { GameEvents, PlayerColors, actions } from 'src/app/constants';
 import { ChessEngineService } from 'src/app/services/chess-engine.service';
-import { GameEvent, Message, Move, SavedGame } from 'src/app/types';
+import {
+  GameEvent,
+  Message,
+  Move,
+  PlayerColor,
+  SavedGame,
+} from 'src/app/types';
 import { environment } from 'src/environments/environment';
 
 @Component({
@@ -39,15 +45,16 @@ export class BoardComponent implements OnInit, OnDestroy {
     this.iFrameUrl = this.sanitizer.bypassSecurityTrustResourceUrl(
       `${environment.appUrl}/iframepage?color=${this.playerColor}`
     );
-    const color = this.playerColor as 'white' | 'black';
+
+    const color = this.playerColor as PlayerColor;
     const moveObservable: Observable<Move> = this.chessEngine[`${color}$`];
     this.moveObserver = moveObservable.subscribe((move) =>
       this.moveListener(move)
     );
-    this.gameEventsObserver = this.chessEngine.events$.subscribe((event) => {
-      console.log(event);
-      return this.gameEventsListener(event);
-    });
+
+    this.gameEventsObserver = this.chessEngine.events$.subscribe((event) =>
+      this.gameEventsListener(event)
+    );
   }
 
   ngOnDestroy(): void {
@@ -76,7 +83,7 @@ export class BoardComponent implements OnInit, OnDestroy {
 
   private loadGame(game: SavedGame) {
     this.playerName =
-      this.playerColor === 'white' ? game.whiteName : game.blackName;
+      this.playerColor === PlayerColors.WHITE ? game.whiteName : game.blackName;
     this.frame.nativeElement.onload = () =>
       this.postMessage({ action: actions.LOAD, data: game });
   }

@@ -1,7 +1,7 @@
 import { Component, HostListener, OnInit, ViewChild } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { MoveChange, NgxChessBoardComponent } from 'ngx-chess-board';
-import { actions } from 'src/app/constants';
+import { PlayerColors, actions } from 'src/app/constants';
 import { Message, Move, SavedGame } from 'src/app/types';
 import { environment } from 'src/environments/environment';
 
@@ -11,6 +11,8 @@ import { environment } from 'src/environments/environment';
   styleUrls: ['./iframe-page.component.scss'],
 })
 export class IFramePageComponent implements OnInit {
+  public readonly PlayerColors = PlayerColors;
+
   public color: string = '';
 
   @ViewChild('board', { static: true }) board!: NgxChessBoardComponent;
@@ -20,7 +22,7 @@ export class IFramePageComponent implements OnInit {
   ngOnInit(): void {
     this.route.queryParams.subscribe((params) => {
       this.color = params['color'];
-      this.color === 'black' && this.board.reverse();
+      this.color === PlayerColors.BLACK && this.board.reverse();
     });
   }
 
@@ -68,6 +70,6 @@ export class IFramePageComponent implements OnInit {
 
   private loadGame(game: SavedGame) {
     this.board.setPGN(game.pgn);
-    this.color === 'black' && this.board.reverse();
+    this.color === PlayerColors.BLACK && this.board.reverse();
   }
 }

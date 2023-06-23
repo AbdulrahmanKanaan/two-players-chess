@@ -11,6 +11,7 @@ import { ButtonComponent } from './components/button/button.component';
 import { NgxChessBoardModule } from 'ngx-chess-board';
 import { PlayerNameComponent } from './components/player-name/player-name.component';
 import { BoardComponent } from './components/board/board.component';
+import { GameFinishedDialogComponent } from './components/game-finished-dialog/game-finished-dialog.component';
 
 @NgModule({
   declarations: [
@@ -21,6 +22,7 @@ import { BoardComponent } from './components/board/board.component';
     ButtonComponent,
     PlayerNameComponent,
     BoardComponent,
+    GameFinishedDialogComponent,
   ],
   imports: [
     BrowserModule,

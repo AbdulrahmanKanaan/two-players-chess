@@ -4,8 +4,8 @@
     [size]="400"
     darkTileColor="saddlebrown"
     lightTileColor="antiquewhite"
-    [lightDisabled]="color === 'black'"
-    [darkDisabled]="color === 'white'"
+    [lightDisabled]="color === PlayerColors.BLACK"
+    [darkDisabled]="color === PlayerColors.WHITE"
     (moveChange)="onMove($event)"
   ></ngx-chess-board>
 </div>
