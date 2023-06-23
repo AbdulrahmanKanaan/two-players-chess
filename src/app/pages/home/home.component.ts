@@ -3,7 +3,7 @@ import { Router } from '@angular/router';
 import { NesDialogService } from 'ngx-nes-css';
 import { NamesDialogComponent } from 'src/app/components/names-dialog/names-dialog.component';
 import { StorageKeys } from 'src/app/constants';
-import { StorageService } from 'src/app/services/storage.service';
+import { StorageService } from 'src/app/services/storage/storage.service';
 
 @Component({
   selector: 'app-home',

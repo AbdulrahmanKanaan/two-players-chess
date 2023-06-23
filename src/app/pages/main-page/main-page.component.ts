@@ -9,7 +9,7 @@ import { NesDialogService } from 'ngx-nes-css';
 import { Subscription } from 'rxjs';
 import { GameFinishedDialogComponent } from 'src/app/components/game-finished-dialog/game-finished-dialog.component';
 import { GameEvents, GameStatuses, actions } from 'src/app/constants';
-import { ChessEngineService } from 'src/app/services/chess-engine.service';
+import { ChessEngineService } from 'src/app/services/chess-engine/chess-engine.service';
 import { GameEvent, GameStatus, Message, Move } from 'src/app/types';
 
 @Component({
@@ -37,7 +37,7 @@ export class MainPageComponent implements AfterViewInit, OnDestroy {
     const navigationState = this.router.getCurrentNavigation()?.extras.state;
     if (navigationState) {
       const { whiteName, blackName } = navigationState;
-      console.log(navigationState)
+      console.log(navigationState);
       this.whiteName = whiteName;
       this.blackName = blackName;
       this.chessEngine.setPlayerNames(whiteName, blackName);

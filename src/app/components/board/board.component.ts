@@ -9,7 +9,7 @@ import {
 import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser';
 import { Observable, Subscription } from 'rxjs';
 import { GameEvents, PlayerColors, actions } from 'src/app/constants';
-import { ChessEngineService } from 'src/app/services/chess-engine.service';
+import { ChessEngineService } from 'src/app/services/chess-engine/chess-engine.service';
 import {
   GameEvent,
   Message,

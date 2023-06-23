@@ -10,15 +10,5 @@
     <app-board [playerName]="blackName" playerColor="black" />
   </div>
 
-  <div class="baloon">
-    <nes-balloon from="right">
-      Welcome {{ whiteName }} & {{ blackName }}!
-      <br />
-      This is a NES-style UI for the game of chess.
-    </nes-balloon>
-    <img
-      src="https://api.dicebear.com/6.x/pixel-art/svg?seed=Max"
-      alt="avatar"
-    />
-  </div>
+  <app-messages-balloon />
 </div>

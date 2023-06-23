@@ -7,4 +7,5 @@ export interface Move {
   pgn: string;
   isKill: boolean;
   piece: string;
+  turn: string;
 }

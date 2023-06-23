@@ -14,6 +14,7 @@ import { GameFinishedDialogComponent } from './components/game-finished-dialog/g
 import { HeaderBarComponent } from './components/header-bar/header-bar.component';
 import { NamesDialogComponent } from './components/names-dialog/names-dialog.component';
 import { FormsModule } from '@angular/forms';
+import { MessagesBalloonComponent } from './components/messages-balloon/messages-balloon.component';
 
 @NgModule({
   declarations: [
@@ -26,6 +27,7 @@ import { FormsModule } from '@angular/forms';
     GameFinishedDialogComponent,
     HeaderBarComponent,
     NamesDialogComponent,
+    MessagesBalloonComponent,
   ],
   imports: [
     FormsModule,

@@ -5,9 +5,9 @@ import {
   GameStatuses,
   PlayerColors,
   StorageKeys,
-} from '../constants';
-import { GameEvent, Move, SavedGame } from '../types';
-import { StorageService } from './storage.service';
+} from '../../constants';
+import { GameEvent, Move, SavedGame } from '../../types';
+import { StorageService } from '../storage/storage.service';
 
 @Injectable({
   providedIn: 'root',
@@ -119,8 +119,11 @@ export class ChessEngineService {
     this._turn = game.turn;
 
     // if old game exists fire event
-    if (game.pgn)
+    if (game.pgn) {
       this.eventsSubject.next({ name: GameEvents.LOAD_GAME, data: game });
+    } else {
+      this.eventsSubject.next({ name: GameEvents.NEW_GAME });
+    }
   }
 
   public setPlayerNames(whiteName: string, blackName: string) {

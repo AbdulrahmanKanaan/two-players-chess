@@ -1,0 +1,21 @@
+@use "../../../styles/variables.scss" as v;
+
+.balloon {
+  display: flex;
+  align-items: flex-end;
+  justify-content: flex-end;
+  width: 900px;
+
+  @media screen and (max-width: v.$breakpoint) {
+    width: fit-content;
+  }
+
+  img {
+    width: 100px;
+    height: 100px;
+  }
+
+  .message {
+    flex: 1;
+  }
+}

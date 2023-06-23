@@ -2,7 +2,7 @@ import { Component, HostListener, OnInit, ViewChild } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { NgxChessBoardComponent, NgxChessBoardService } from 'ngx-chess-board';
 import { PlayerColors, actions } from 'src/app/constants';
-import { Message, Move, SavedGame } from 'src/app/types';
+import { Message, Move, PlayerColor, SavedGame } from 'src/app/types';
 import { environment } from 'src/environments/environment';
 
 @Component({
@@ -13,7 +13,7 @@ import { environment } from 'src/environments/environment';
 export class IFramePageComponent implements OnInit {
   public readonly PlayerColors = PlayerColors;
 
-  public color: string = '';
+  public color?: PlayerColor;
 
   @ViewChild('board', { static: true }) board!: NgxChessBoardComponent;
 
@@ -64,6 +64,7 @@ export class IFramePageComponent implements OnInit {
       pgn: event.pgn.pgn,
       isKill: event.x,
       piece: event.piece,
+      turn: this.color!,
     };
 
     const message: Message<Move> = {
