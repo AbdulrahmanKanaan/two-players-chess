@@ -44,7 +44,7 @@ export class BoardComponent implements OnInit, OnDestroy {
 
   ngOnInit(): void {
     this.iFrameUrl = this.sanitizer.bypassSecurityTrustResourceUrl(
-      `${environment.appUrl}/iframepage?color=${this.playerColor}`
+      `/iframepage?color=${this.playerColor}`
     );
 
     const color = this.playerColor as PlayerColor;
