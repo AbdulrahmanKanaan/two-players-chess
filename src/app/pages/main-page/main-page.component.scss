@@ -1,18 +1,14 @@
 @use "../../../styles/variables.scss" as v;
 
 .container {
-  width: 100vw;
   min-height: 100%;
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
   gap: 20px;
-  overflow: scroll;
 
-  @media screen and (max-width: v.$breakpoint) {
-    padding: 25px 0;
-  }
+  padding: 25px 0;
 }
 
 .game-container {
