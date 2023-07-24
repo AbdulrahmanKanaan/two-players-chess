@@ -1,6 +1,6 @@
 # TwoPlayersChess
 
-Two players chess game on the same device build with angular
+Two players chess game on the same device built with angular
 
 ## Installation
 
